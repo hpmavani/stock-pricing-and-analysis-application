@@ -41,7 +41,6 @@ public class AlpacaEndpoint implements Session.Listener {
                     String msg = node.path("msg").asText();
                     System.out.println(msg);
                     if(msg.equals("connected")) {
-                        System.out.println(auth);
                         session.sendText(auth, Callback.from(session :: demand, Throwable :: printStackTrace));
                     } else if (msg.equals("authenticated")) {
                         System.out.println("Subscribing");
@@ -78,3 +77,4 @@ public class AlpacaEndpoint implements Session.Listener {
     }
     
 }
+

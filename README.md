@@ -27,7 +27,7 @@ A work-in-progress Java backend that streams real-time stock market data using W
   export ALPACA_SECRET=your_secret
 ```
 * Run the Server <br>
-javac SimplestServer.java <br>
-java SimplestServer
+javac MyServer.java <br>
+java MyServer
 
   

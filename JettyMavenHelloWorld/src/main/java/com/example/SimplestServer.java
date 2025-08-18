@@ -44,16 +44,12 @@ public class SimplestServer
     }
     
     public static void main(String[] args) {
-        HttpClient httpClient = new HttpClient(); 
-        WebSocketClient websocketClient = new WebSocketClient(httpClient); 
         
         try {
-            websocketClient.start();
-            AlpacaEndpoint alpacaEndpoint = new AlpacaEndpoint(); 
-            URI serverURI = new URI("wss://stream.data.alpaca.markets/v2/test");
-
-            CompletableFuture<Session> clientSessionPromise = websocketClient.connect(alpacaEndpoint, serverURI);
-
+            MarketDataStreamer.connectToAlpaca();
+            Server server = newServer(8080);
+            server.start();
+            
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

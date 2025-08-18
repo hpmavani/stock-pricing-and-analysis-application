@@ -1,3 +1,9 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.project.sourcePaths": [
+        "Realtime_Stock_Prices/src",
+        "JettyMavenHelloWorld/src",
+        "JettyMavenHelloWorld/com",
+        "JettyServer/src/main/java/com/example"
+    ]
 }

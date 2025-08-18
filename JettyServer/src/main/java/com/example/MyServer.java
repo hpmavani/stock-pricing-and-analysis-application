@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 
 import jakarta.websocket.server.ServerEndpointConfig;
 
-public class SimplestServer
+public class MyServer
 {
     public static Server newServer(int port) 
     {

@@ -30,6 +30,9 @@ import org.slf4j.Logger;
 
 import java.util.concurrent.CompletableFuture;
 
+/* MyEndpoint handles connections from clients by implementing jetty Session.Listener
+ * and sends price updates to subscribers/listeners
+ */
 @ServerEndpoint("/ws")
 public class MyEndpoint implements Session.Listener {
     
@@ -52,6 +55,7 @@ public class MyEndpoint implements Session.Listener {
         System.out.println("WebSocket closed.");
     }
 
+    //Handles subscription requests to different tickers
     @Override
     public void onWebSocketText(String message) {
         // If message is a subscription
@@ -77,10 +81,10 @@ public class MyEndpoint implements Session.Listener {
             //this.remote.sendText(alpaca_result);
             
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
+            System.out.println("Could not map Json" + e);
             e.printStackTrace();
         } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
+            System.out.println("Could not process Json" + e);
             e.printStackTrace();
         }
         
@@ -95,6 +99,7 @@ public class MyEndpoint implements Session.Listener {
         System.out.println("Succeeded");
     }
 
+    // Parse price updates into json string and send updates to all sessions listening to updated ticker
     public static void broadcastQuote(String ticker, String openPrice) {
         String json = "{\"ticker\":" + ticker + ", \"open\":" + openPrice + "}";
         System.out.println(json);

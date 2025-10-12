@@ -18,8 +18,7 @@ A work-in-progress Java backend that streams real-time stock market data using W
 ## Getting Started
 * Clone the repository
 ```bash
-   git clone https://github.com/yourusername/stock-pricing-and-analysis-application.git
-   cd stock-pricing-and-analysis-application
+   git clone https://github.com/hpmavani/stock-pricing-and-analysis-application.git
 ```
 * Set environment variables "ALPACA_API_KEY" and "ALPACA_SECRET"
 ```bash
@@ -27,7 +26,7 @@ A work-in-progress Java backend that streams real-time stock market data using W
   export ALPACA_SECRET=your_secret
 ```
 * Run the Server <br>
-javac SimplestServer.java <br>
-java SimplestServer
+javac MyServer.java <br>
+java MyServer
 
   

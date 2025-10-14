@@ -24,18 +24,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 
-/* MyEndpoint handles connections from clients by implementing Jakarta Endpoint API
- * and sends price updates to subscribers/listeners
- */
+/* Websocket server endpoint for clients to connect to and receive price updates */
 
 @ServerEndpoint("/ws")
 public class MyEndpoint {
     
     private static final Logger LOG = LoggerFactory.getLogger(MyEndpoint.class);
     private Session session;
+
+    //Map of sessions to subscribed tickers
     private static final Map<Session, Set<String>> subscriptions = new ConcurrentHashMap<>();
     private ObjectMapper mapper = new ObjectMapper();
     
+    //Handles new client connection
     @OnOpen
     public void onOpen(Session session, EndpointConfig conf) {
         //Store session
@@ -49,12 +50,13 @@ public class MyEndpoint {
         }
     }
 
+    //Handles closed client connection
     @OnClose
     public void onClose(Session session, CloseReason reason) {
         System.out.println("WebSocket closed.");
     }
 
-    //Handles subscription requests to different tickers
+    //Handles messages from clients such as subscription requests to different tickers
     @OnMessage
     public void onMessage(Session session, String message) {
         // If message is a subscription

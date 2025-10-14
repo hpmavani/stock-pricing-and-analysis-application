@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.MyEndpoint;
 
 
-
 @WebSocket(autoDemand = true)
 public class AlpacaEndpoint implements Session.Listener {
     private Session session;
@@ -41,18 +40,18 @@ public class AlpacaEndpoint implements Session.Listener {
     @Override
     public void onWebSocketText(String message) {
         LOG.info("Received data", message);
-        System.out.println(message);
+        //System.out.println(message);
         try {
             JsonNode root = mapper.readTree(message);
             if (root.findValue("msg") != null) {
-                System.out.println("Initial msg");
+                //System.out.println("Initial msg");
                 for(JsonNode node : root) {
                     String msg = node.path("msg").asText();
-                    System.out.println(msg);
+                    //System.out.println(msg);
                     if(msg.equals("connected")) {
                         session.sendText(auth, Callback.from(session :: demand, Throwable :: printStackTrace));
                     } else if (msg.equals("authenticated")) {
-                        System.out.println("Subscribing");
+                        //System.out.println("Subscribing");
                         session.sendText(subscribe, Callback.from(session :: demand, Throwable :: printStackTrace));
                     } 
                 }
@@ -62,12 +61,12 @@ public class AlpacaEndpoint implements Session.Listener {
                 for (JsonNode node : root) {
                     String type = node.path("T").asText();
                     if (type.equals("q")) {
-                        System.out.println("Quote received"); 
+                        //System.out.println("Quote received"); 
                         this.messageHandler.accept(node.path("bp").asText());
                     } else if (type.equals("t")) {
-                        System.out.println("Trade received");
+                        //System.out.println("Trade received");
                     } else {
-                        System.out.println(type);
+                        //System.out.println(type);
                     }
                 }
                 session.demand();

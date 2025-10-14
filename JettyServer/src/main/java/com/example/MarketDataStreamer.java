@@ -27,21 +27,16 @@ public class MarketDataStreamer {
             websocketClient.start();
 
             //Create an AlpacaEndpoint instance with a callback that broadcasts price updates to MyEndpoint
-            //MyEndpoint is the Endpoint from this server -> listeners
+
             AlpacaEndpoint alpacaEndpoint = new AlpacaEndpoint(message -> {
-                System.out.println(message);
-                //quotes.add(message);
                 MyEndpoint.broadcastQuote("FAKEPACA", message);
             }); 
             
-            //Initialize a Session instance for connection to Alpaca Websocket
+            //Initialize a Session for blocking connection to Alpaca Websocket
             Session alpacaSession = websocketClient.connect(alpacaEndpoint, alpacaURI).get(); 
+            
             //.connect() establishes the connection with a promise of returning a session in the future
             //.get() adds an additional non-blocking feature that blocks until session is received
-
-            if(alpacaSession != null) {
-                System.out.println("Connected to Alpaca!");
-            }
         }
         catch(Exception e) {
             System.out.println("Couldn't establish connection to Alpaca: " + e); 

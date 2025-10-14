@@ -8,62 +8,60 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.websocket.CloseReason;
-import jakarta.websocket.Endpoint;
 import jakarta.websocket.EndpointConfig;
-import jakarta.websocket.MessageHandler;
-import jakarta.websocket.RemoteEndpoint;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 
-import java.net.URI;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.util.Callback;
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.slf4j.Logger;
 
-import java.util.concurrent.CompletableFuture;
-
-/* MyEndpoint handles connections from clients by implementing jetty Session.Listener
+/* MyEndpoint handles connections from clients by implementing Jakarta Endpoint API
  * and sends price updates to subscribers/listeners
  */
+
 @ServerEndpoint("/ws")
-public class MyEndpoint implements Session.Listener {
+public class MyEndpoint {
     
     private static final Logger LOG = LoggerFactory.getLogger(MyEndpoint.class);
     private Session session;
     private static final Map<Session, Set<String>> subscriptions = new ConcurrentHashMap<>();
     private ObjectMapper mapper = new ObjectMapper();
-    private HttpClient httpClient = new HttpClient(); 
-    private WebSocketClient websocketClient = new WebSocketClient(httpClient); 
     
-    @Override
-    public void onWebSocketOpen(Session session) {
+    @OnOpen
+    public void onOpen(Session session, EndpointConfig conf) {
+        //Store session
         this.session = session;
-        LOG.info("WebSocket Open: {}", session);
         System.out.println("connected to ws.");
+        try {
+            session.getBasicRemote().sendText("Connection Success");
+        } catch (IOException e) {
+            System.out.println("Could not send text" + e);
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void onWebSocketClose(int statusCode, String reason) {
+    @OnClose
+    public void onClose(Session session, CloseReason reason) {
         System.out.println("WebSocket closed.");
     }
 
     //Handles subscription requests to different tickers
-    @Override
-    public void onWebSocketText(String message) {
+    @OnMessage
+    public void onMessage(Session session, String message) {
         // If message is a subscription
         //LOG.info("Echoing back text message [{}]", message);
         try {
             JsonNode root = mapper.readTree(message);
             //String tickers = root.path("tickers").asText();
-
             if (root.get("type").asText().equals("subscription")) {
                 String tickers = root.get("tickers").asText();
                 System.out.println("Subscription request for " + tickers);
@@ -71,9 +69,9 @@ public class MyEndpoint implements Session.Listener {
                 ticker_set.add("AMD");
                 ticker_set.add("FAKEPACA");
                 subscriptions.put(this.session, ticker_set); 
-
                 String response = "{\"status\": \"success\", \"tickers\": \"" + tickers + "\"}";
-
+            } else {
+                System.out.println(message);
             }
             //String tickers = "[AMD]";
 
@@ -90,24 +88,24 @@ public class MyEndpoint implements Session.Listener {
         
     }
 
-    @Override
-    public void onWebSocketError(Throwable cause) {
-        LOG.warn("WebSocket Error", cause);
-    }
-
-    public static void success() {
-        System.out.println("Succeeded");
+    @OnError
+    public void onError(Throwable cause) {
+        //LOG.warn("WebSocket Error", cause);
+        System.out.println("Websocket error" + cause);
     }
 
     // Parse price updates into json string and send updates to all sessions listening to updated ticker
     public static void broadcastQuote(String ticker, String openPrice) {
         String json = "{\"ticker\":" + ticker + ", \"open\":" + openPrice + "}";
-        System.out.println(json);
+        //System.out.println("Broadcasting: " + json);
         for(Session session : subscriptions.keySet()) {
-            if (subscriptions.get(session).contains(ticker)) {                
-                //session.sendText(json, Callback.from(success()));
-                //TO DO: Test with client, actually send text data
-                
+            try {
+                if (subscriptions.get(session).contains(ticker)) {         
+                    //TO DO: Test with client, actually send text data
+                    session.getBasicRemote().sendText(json);
+                }
+            } catch (Exception e) {
+                System.out.println("Could not send update to session" + e);
             }
         }
     }

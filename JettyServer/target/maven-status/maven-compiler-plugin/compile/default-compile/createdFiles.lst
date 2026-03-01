@@ -1,0 +1,10 @@
+com\example\Alpaca\AlpacaClient.class
+com\example\Alpaca\WebSocketMessageListener.class
+com\example\Alpaca\AlpacaMarketDataService.class
+com\example\Domain\Quote.class
+com\example\Main.class
+com\example\Providers\iQuoteProvider.class
+com\example\Alpaca\AlpacaClientEndpoint.class
+com\example\Providers\QuoteProvider.class
+com\example\QuoteService.class
+com\example\iQuoteService.class

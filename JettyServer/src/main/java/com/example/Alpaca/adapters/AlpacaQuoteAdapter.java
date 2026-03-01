@@ -1,4 +1,4 @@
-package com.example.Alpaca;
+package com.example.Alpaca.adapters;
 
 import java.util.List;
 
@@ -9,19 +9,19 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class AlpacaAdapter {
+public class AlpacaQuoteAdapter {
 
     private ObjectMapper om;
 
-    public AlpacaAdapter() {
+    public AlpacaQuoteAdapter() {
         om = new ObjectMapper();
     }
 
     public Quote toQuote(String quoteJson) {
-        List<AlpacaQuote> alpacaQuotes;
+        AlpacaQuote alpacaQuote;
 
         try {
-            alpacaQuotes = this.om.readValue(quoteJson, new TypeReference<List<AlpacaQuote>>(){});
+            alpacaQuote = this.om.readValue(quoteJson, AlpacaQuote.class);
         } catch (JsonMappingException me) {
             System.out.println("Could not map quote json to Alpaca Quote: " + me.toString());
             return null; //TODO: should raise
@@ -32,9 +32,9 @@ public class AlpacaAdapter {
 
         
         Quote quote = new Quote(
-            alpacaQuotes.get(0).getSymbol(),
-            alpacaQuotes.get(0).getAskPrice(),
-            alpacaQuotes.get(0).getBidPrice()
+            alpacaQuote.getSymbol(),
+            alpacaQuote.getAskPrice(),
+            alpacaQuote.getBidPrice()
         );
     
 

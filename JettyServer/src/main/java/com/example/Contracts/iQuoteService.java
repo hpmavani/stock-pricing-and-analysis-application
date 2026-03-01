@@ -6,5 +6,6 @@ public interface iQuoteService {
     /**
      * Fetch a quote via the underlying provider.
      */
-    Quote fetchQuote(String ticker);
+    Quote processQuote(String quote);
+
 }

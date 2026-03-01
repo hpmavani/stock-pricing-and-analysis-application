@@ -13,7 +13,7 @@ public class QuoteService implements iQuoteService {
     }
 
     @Override
-    public Quote fetchQuote(String ticker) {
+    public Quote processQuote(String ticker) {
         return provider.getQuote(ticker);
     }
 }

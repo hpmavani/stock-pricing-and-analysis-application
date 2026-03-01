@@ -53,21 +53,4 @@ public class AlpacaQuote {
         return this.ap;
     }
 
-    @Override
-    public String toString() {
-        return "AlpacaQuote{" +
-                "T='" + T + '\'' +
-                ", S='" + S + '\'' +
-                ", bx='" + bx + '\'' +
-                ", bp=" + bp +
-                ", bs=" + bs +
-                ", ax='" + ax + '\'' +
-                ", ap=" + ap +
-                ", as=" + as +
-                ", c=" + c +
-                ", z='" + z + '\'' +
-                ", t=" + t +
-                '}';
-    }
-
 }

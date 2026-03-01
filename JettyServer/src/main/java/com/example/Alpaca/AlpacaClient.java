@@ -133,8 +133,15 @@ public class AlpacaClient {
         System.out.println("Subscribing...");
         StringBuilder sb = new StringBuilder();
 
-        String subscriptionText = "{\"action\": \"subscribe\", \"quotes\":[";
+        String subscriptionText = "{\"action\": \"subscribe\", \"trades\":[";
         sb.append(subscriptionText);
+
+        for(String ticker: tickers) {
+            sb.append("\"" + ticker + "\",");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        
+        sb.append("], \"quotes\":[");
 
         for(String ticker: tickers) {
             sb.append("\"" + ticker + "\",");

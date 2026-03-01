@@ -2,9 +2,10 @@ package com.example;
 
 import java.util.ArrayList;
 
-import com.example.Alpaca.AlpacaAdapter;
 import com.example.Alpaca.AlpacaClient;
 import com.example.Alpaca.AlpacaMarketDataService;
+import com.example.Alpaca.adapters.AlpacaQuoteAdapter;
+import com.example.Alpaca.adapters.AlpacaTradeAdapter;
 import com.example.Contracts.WebSocketMessageListener;
 
 public class Main {
@@ -13,7 +14,8 @@ public class Main {
 
         AlpacaClient ac;
         WebSocketMessageListener mdService;
-        AlpacaAdapter adapter;
+        AlpacaQuoteAdapter qAdapter;
+        AlpacaTradeAdapter tAdapter;
         
         try {
             
@@ -34,8 +36,9 @@ public class Main {
 
             System.out.println("Connected: " + ac.isConnected());
 
-            adapter = new AlpacaAdapter();
-            mdService = new AlpacaMarketDataService(ac, adapter);
+            qAdapter = new AlpacaQuoteAdapter();
+            tAdapter = new AlpacaTradeAdapter();
+            mdService = new AlpacaMarketDataService(ac, qAdapter, tAdapter);
             ac.addListener(mdService);
 
         }

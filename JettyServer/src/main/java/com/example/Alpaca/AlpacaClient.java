@@ -1,6 +1,6 @@
 package com.example.Alpaca;
 
-import com.example.Contracts.WebSocketMessageListener;
+import com.example.Contracts.iWebSocketListener;
 import com.example.Domain.Quote;
 import java.net.URI;
 import java.util.*;
@@ -177,11 +177,12 @@ public class AlpacaClient {
         return session.isOpen();
     }
 
-    public void addListener(WebSocketMessageListener listener) {
-        this.alpacaEndpoint.registerListener(listener); 
+    public void addListener(iWebSocketListener listener) {
+        this.alpacaEndpoint.registerListener(listener);
+        System.out.println("Alpaca Client added a message listener"); 
     }
 
-    public void removeListener(WebSocketMessageListener listener) {
+    public void removeListener(iWebSocketListener listener) {
         this.alpacaEndpoint.removeListener(listener);
     }
 }

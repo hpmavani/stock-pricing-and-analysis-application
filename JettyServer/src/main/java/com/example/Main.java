@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 import com.example.Alpaca.AlpacaClient;
 import com.example.Alpaca.AlpacaMarketDataService;
+import com.example.Alpaca.MarketDataService;
 import com.example.Alpaca.adapters.AlpacaQuoteAdapter;
 import com.example.Alpaca.adapters.AlpacaTradeAdapter;
-import com.example.Contracts.WebSocketMessageListener;
 
 public class Main {
     
     public static void main(String[] args) {
 
         AlpacaClient ac;
-        WebSocketMessageListener mdService;
+        MarketDataService mdService;
         AlpacaQuoteAdapter qAdapter;
         AlpacaTradeAdapter tAdapter;
         
@@ -28,19 +28,31 @@ public class Main {
         
         try {
 
-            MarketDataServer server = new MarketDataServer();
+            // Configure Alpaca Client
             ac.connectWebSocket();
             ac.authenticate();
-            
+
+            // Instantiate + Start Server
+            MarketDataServer server = MarketDataServer.getInstance();
+            server.start();
+
+            // Add Test Tickers
             ArrayList<String> tickers = new ArrayList<String>();
             tickers.add("FAKEPACA");
             ac.subscribe(tickers); 
 
             System.out.println("Connected: " + ac.isConnected());
 
+            // Instantiate Market Data Service
             qAdapter = new AlpacaQuoteAdapter();
             tAdapter = new AlpacaTradeAdapter();
-            mdService = new AlpacaMarketDataService(ac, qAdapter, tAdapter, server);
+            mdService = new AlpacaMarketDataService(qAdapter, tAdapter);
+
+            // Add Listeners to Market Data Service
+            mdService.addTradeListener(server);
+            mdService.addQuoteListener(server);
+
+            // Add Listener to Alpaca Client
             ac.addListener(mdService);
 
         }

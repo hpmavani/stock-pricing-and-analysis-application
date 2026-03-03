@@ -1,17 +1,17 @@
 package com.example;
 
-import java.util.List;
-
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
-import org.eclipse.jetty.ee11.webapp.WebAppContext;
 import org.eclipse.jetty.ee11.websocket.jakarta.server.config.JakartaWebSocketServletContainerInitializer;
 import org.eclipse.jetty.server.Server;
 
-import com.example.Domain.MarketEvent;
+import com.example.Contracts.iQuoteListener;
+import com.example.Contracts.iTradeListener;
+import com.example.Domain.Quote;
+import com.example.Domain.Trade;
 
 /* Singleton */
 
-public class MarketDataServer {
+public class MarketDataServer implements iQuoteListener, iTradeListener{
 
     private Server server;
     private ServletContextHandler handler;
@@ -33,6 +33,8 @@ public class MarketDataServer {
             // Simple registration of your WebSocket endpoints.
             container.addEndpoint(MarketDataServerEndpoint.class);
         });
+
+        System.out.println("Configuring market data server...");
     }
 
     public static MarketDataServer getInstance() throws Exception {
@@ -48,9 +50,14 @@ public class MarketDataServer {
         } catch(Exception e) {
             System.out.println("Failed to start server: " + e.toString());
         }
+        System.out.println("Started Market Data Server Successfully!");
     }
 
-    public void broadcast(MarketEvent event) {
-        MarketDataServerEndpoint.broadcast(event);
+    public void onQuote(Quote quote) {
+        MarketDataServerEndpoint.broadcast(quote);
+    }
+
+    public void onTrade(Trade trade) {
+        MarketDataServerEndpoint.broadcast(trade);
     }
 }

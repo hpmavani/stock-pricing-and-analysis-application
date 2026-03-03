@@ -12,7 +12,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketOpen;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
-import com.example.Contracts.WebSocketMessageListener;
+import com.example.Contracts.iWebSocketListener;
 
 
 /**
@@ -24,7 +24,7 @@ public class AlpacaClientEndpoint {
 
     //Here it should have the service? The service is our listener
 
-    private List<WebSocketMessageListener> listeners = new ArrayList<>();
+    private List<iWebSocketListener> listeners = new ArrayList<>();
 
     @OnWebSocketOpen
     public void onOpen(Session session) {
@@ -34,7 +34,7 @@ public class AlpacaClientEndpoint {
     @OnWebSocketMessage
     public void onTextMessage(Session session, String message) {
         // Notify all registered listeners
-        for (WebSocketMessageListener listener : listeners) {
+        for (iWebSocketListener listener : listeners) {
             listener.onMessage(message);
         }
     }
@@ -55,11 +55,11 @@ public class AlpacaClientEndpoint {
         throwable.printStackTrace();
     }
 
-    public void registerListener(WebSocketMessageListener listener) {
+    public void registerListener(iWebSocketListener listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(WebSocketMessageListener listener) {
+    public void removeListener(iWebSocketListener listener) {
         listeners.remove(listener);
     }
 

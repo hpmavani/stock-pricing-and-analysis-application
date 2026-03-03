@@ -1,12 +1,15 @@
 package com.example.Alpaca;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.MarketDataServer;
 import com.example.Alpaca.adapters.AlpacaQuoteAdapter;
 import com.example.Alpaca.adapters.AlpacaTradeAdapter;
-import com.example.Contracts.WebSocketMessageListener;
+import com.example.Contracts.iWebSocketListener;
+import com.example.Contracts.iQuoteListener;
 import com.example.Contracts.iQuoteService;
+import com.example.Contracts.iTradeListener;
 import com.example.Contracts.iTradeService;
 import com.example.Domain.MarketDataSubscriber;
 import com.example.Domain.Quote;
@@ -19,21 +22,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Service that fetches quotes from the Alpaca API via the AlpacaClient.
  */
-public class AlpacaMarketDataService implements WebSocketMessageListener, iQuoteService, iTradeService {
+public class AlpacaMarketDataService extends MarketDataService {
 
-    private final AlpacaClient client;
     private final AlpacaQuoteAdapter quoteAdapter;
     private final ObjectMapper objectMapper;
     private final AlpacaTradeAdapter tradeAdapter;
 
-    private MarketDataServer server;
-
-    public AlpacaMarketDataService(AlpacaClient client, AlpacaQuoteAdapter quoteAdapter, 
-                                    AlpacaTradeAdapter tradeAdapter, MarketDataServer server) {
-        this.client = client;
+    public AlpacaMarketDataService(AlpacaQuoteAdapter quoteAdapter, AlpacaTradeAdapter tradeAdapter) {
         this.quoteAdapter = quoteAdapter;
         this.tradeAdapter = tradeAdapter;
-        this.server = server;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -44,8 +41,8 @@ public class AlpacaMarketDataService implements WebSocketMessageListener, iQuote
             for (JsonNode event : events) {
                 String type = event.get("T").asText();
                 switch (type) {
-                    case "t" -> processTrade(event.toString());
-                    case "q" -> processQuote(event.toString());
+                    case "t" -> onTrade(event.toString());
+                    case "q" -> onQuote(event.toString());
                 }
             }
         } catch (JsonProcessingException e) {
@@ -54,20 +51,27 @@ public class AlpacaMarketDataService implements WebSocketMessageListener, iQuote
         
     }
 
-    @Override
-    public Quote processQuote(String quote) {
+    public void onQuote(String quote) {
         Quote q = this.quoteAdapter.toQuote(quote);
-        // converts to quote using adapter
-        server.broadcast(q);
-        return q;
-    }
-    @Override
-    public Trade processTrade(String trade) {
-        Trade t = this.tradeAdapter.toTrade(trade);
-        // converts to quote using adapter
-        
-        server.broadcast(t);
-        return t;
+        super.getQuoteListeners().forEach((ql) -> {
+            ql.onQuote(q);
+        });
     }
 
+    public void onTrade(String trade) {
+        Trade t = this.tradeAdapter.toTrade(trade);
+        super.getTradeListeners().forEach((tl) -> {
+            tl.onTrade(t);
+        });
+    }
+
+    public void addQuoteListener(iQuoteListener ql) {
+        super.addQuoteListener(ql);
+        System.out.println("Alpaca Service added quote listener");
+    }
+
+    public void addTradeListener(iTradeListener tl) {
+        super.addTradeListener(tl);
+        System.out.println("Alpaca Service added trade listener");
+    }
 }

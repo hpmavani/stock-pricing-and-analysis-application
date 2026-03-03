@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.example.Alpaca.AlpacaClient;
 import com.example.Alpaca.AlpacaMarketDataService;
-import com.example.Alpaca.MarketDataService;
 import com.example.Alpaca.adapters.AlpacaQuoteAdapter;
 import com.example.Alpaca.adapters.AlpacaTradeAdapter;
 
@@ -18,12 +17,11 @@ public class Main {
         AlpacaTradeAdapter tAdapter;
         
         try {
-            
             ac = new AlpacaClient();
             
         } catch (Exception e) {
             System.out.println("Could not instantiate client" + e.toString());
-            ac = null;
+            return;
         }
         
         try {

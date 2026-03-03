@@ -2,8 +2,10 @@ package com.example.Alpaca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.example.MarketDataServer;
+import com.example.MarketDataService;
 import com.example.Alpaca.adapters.AlpacaQuoteAdapter;
 import com.example.Alpaca.adapters.AlpacaTradeAdapter;
 import com.example.Contracts.iWebSocketListener;
@@ -59,7 +61,11 @@ public class AlpacaMarketDataService extends MarketDataService {
     }
 
     public void onTrade(String trade) {
+        Random rand = new Random();
         Trade t = this.tradeAdapter.toTrade(trade);
+        double new_price = t.getPrice() + (-1 + rand.nextFloat() * 2);
+        new_price = Math.round(new_price * 100.0) / 100.0;
+        t.setPrice(new_price);
         super.getTradeListeners().forEach((tl) -> {
             tl.onTrade(t);
         });

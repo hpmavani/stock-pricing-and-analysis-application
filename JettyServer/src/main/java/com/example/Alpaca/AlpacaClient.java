@@ -34,6 +34,8 @@ public class AlpacaClient {
      * @param apiKey    Alpaca API key (must not be null/empty)
      * @param apiSecret Alpaca API secret (must not be null/empty)
      */
+
+    //TODO: Use a better configuration method for API
     public AlpacaClient(String apiKey, String apiSecret) {
         this.apiKey = requireNonNullOrEmpty(apiKey, "apiKey");
         this.apiSecret = requireNonNullOrEmpty(apiSecret, "apiSecret");
@@ -94,6 +96,7 @@ public class AlpacaClient {
      * @throws Exception if sending fails
      */
 
+    // TODO: This method does not follow best practice
     public void sendSync(String message) throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
 
@@ -171,6 +174,8 @@ public class AlpacaClient {
     public void closeWebSocket() throws Exception {
         System.out.println("Closing connection to Alpaca...");
         session.close(StatusCode.NORMAL, "End Websocket connection", Callback.NOOP);
+        websocketClient.stop();
+        httpClient.stop();
     }
 
     public boolean isConnected() {

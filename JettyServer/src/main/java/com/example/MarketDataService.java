@@ -1,4 +1,4 @@
-package com.example.Alpaca;
+package com.example;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,6 @@ import com.example.Contracts.iQuoteService;
 import com.example.Contracts.iTradeListener;
 import com.example.Contracts.iTradeService;
 import com.example.Contracts.iWebSocketListener;
-import com.example.Domain.Quote;
-import com.example.Domain.Trade;
 
 public abstract class MarketDataService implements iQuoteService, iTradeService, iWebSocketListener {
 

@@ -22,8 +22,6 @@ import com.example.Contracts.iWebSocketListener;
 @WebSocket(autoDemand = true)
 public class AlpacaClientEndpoint {
 
-    //Here it should have the service? The service is our listener
-
     private List<iWebSocketListener> listeners = new ArrayList<>();
 
     @OnWebSocketOpen

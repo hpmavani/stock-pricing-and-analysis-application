@@ -6,12 +6,12 @@ A work-in-progress Java backend that streams real-time stock market data using W
 ## Features (Work in Progress)
 - ✅ WebSocket integration with Alpaca API for live price streaming
 - ✅ Basic Jetty 12 WebSocket server
-- 🚧 Modularized backend design using OOP and Observer pattern
+- ✅ Modularized backend design using OOP, Domain-Driven Design, and Design patterns
 - 🚧 Client subscription for continuous real-time updates
 - 🚧 Future: basic analysis & insights
   
 ## Prerequisites
-* Jetty 12
+* Jetty 12.1.6
 * Java 8+
 * Alpaca API Key & Secret Key
 
@@ -26,7 +26,7 @@ A work-in-progress Java backend that streams real-time stock market data using W
   export ALPACA_SECRET=your_secret
 ```
 * Run the Server <br>
-javac MyServer.java <br>
-java MyServer
+javac Main.java <br>
+java Main
 
   

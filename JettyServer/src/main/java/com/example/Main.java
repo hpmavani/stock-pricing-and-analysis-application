@@ -27,6 +27,8 @@ public class Main {
         }
         
         try {
+
+            MarketDataServer server = new MarketDataServer();
             ac.connectWebSocket();
             ac.authenticate();
             
@@ -38,7 +40,7 @@ public class Main {
 
             qAdapter = new AlpacaQuoteAdapter();
             tAdapter = new AlpacaTradeAdapter();
-            mdService = new AlpacaMarketDataService(ac, qAdapter, tAdapter);
+            mdService = new AlpacaMarketDataService(ac, qAdapter, tAdapter, server);
             ac.addListener(mdService);
 
         }

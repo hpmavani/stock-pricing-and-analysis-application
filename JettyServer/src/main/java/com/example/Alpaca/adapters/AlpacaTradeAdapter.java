@@ -1,13 +1,8 @@
 package com.example.Alpaca.adapters;
 
-import java.util.List;
-
-import com.example.DTOs.AlpacaQuote;
 import com.example.DTOs.AlpacaTrade;
-import com.example.Domain.Quote;
 import com.example.Domain.Trade;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -2,8 +2,9 @@ package com.example.Domain;
 
 import java.util.Objects;
 
-public class Quote {
-
+public class Quote extends MarketEvent {
+	
+	private String eventType;
 	private String ticker;
 	private double askPrice;
 	private double bidPrice;
@@ -17,6 +18,14 @@ public class Quote {
 		this.bidPrice = bidPrice;
 	}
 
+	public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+	
 	public String getTicker() {
 		return ticker;
 	}

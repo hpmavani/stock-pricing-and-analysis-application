@@ -1,7 +1,8 @@
 package com.example.Domain;
 
-public class Trade {
+public class Trade extends MarketEvent{
 
+	private String eventType;
     private String ticker;
     private double price;
     private int size;
@@ -12,6 +13,14 @@ public class Trade {
         this.price = price;
         this.size = size;
         this.timestamp = timestamp;
+    }
+
+	public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
     public String getTicker() {

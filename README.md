@@ -1,4 +1,4 @@
-# stock-pricing-and-analysis-application
+# Stock Price Streaming Backend
 
 ## Overview
 A work-in-progress Java backend that streams real-time stock market data using WebSockets and the Alpaca API, designed to practice low-latency system design and modular backend architecture.
